@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwt.RoleBasedAuth.entity.Role;
 import com.jwt.RoleBasedAuth.entity.UserEntity;
 import com.jwt.RoleBasedAuth.service.AdminService;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -30,19 +33,26 @@ public class AdminController {
     // return adminService.getData();
     // }
 
-    @GetMapping("/dashboard")
-    public ResponseEntity<String> getAdminData() {
-        return ResponseEntity.ok("Welcome Admin!");
+    @GetMapping("/role")
+    public ResponseEntity<List<UserEntity>> addData(@RequestParam String role) {
+        return ResponseEntity.ok(adminService.getDataByAdmin(Role.valueOf(role.toUpperCase())));
     }
 
-    @GetMapping("/add-admin")
-    public ResponseEntity<List<UserEntity>> addData() {
-        return ResponseEntity.ok(adminService.getDataByAdmin(Role.ADMIN));
+    @GetMapping("/get-admin")
+    public ResponseEntity<Object> getData() {
+        return ResponseEntity.ok(adminService.getAllAdmin());
     }
 
     @DeleteMapping("/delete-admin/{id}")
-    public ResponseEntity<Object> deleteData(@RequestBody UserEntity id) {
-        return ResponseEntity.ok(adminService.deleteAdmin(id));
+    public ResponseEntity<Object> deleteData(@PathVariable Long id) {
+        adminService.deleteAdmin(id);
+        return ResponseEntity.ok("User deleted successfully!");
+    }
+
+    @PutMapping("/update-admin/{id}")
+    public ResponseEntity<Object> updateData(@PathVariable Long id, @RequestBody UserEntity entity) {
+        adminService.updateAdmin(entity, id);
+        return ResponseEntity.ok("User updated sucessfully!");
     }
 
 }

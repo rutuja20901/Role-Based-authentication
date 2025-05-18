@@ -14,6 +14,4 @@ public interface AdminRepo extends JpaRepository<UserEntity, Long> {
 
     List<UserEntity> findByRole(com.jwt.RoleBasedAuth.entity.Role admin);
 
-    ResponseEntity<Object> deleteAdminId(UserEntity id);
-
 }

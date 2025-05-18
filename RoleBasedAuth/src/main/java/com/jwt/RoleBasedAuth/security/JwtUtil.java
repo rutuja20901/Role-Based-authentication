@@ -16,11 +16,12 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
 
-    // private final String secretKey = "Seceet_key";
+    private final String secretKey = "yourverysecurestaticsecretkeythatislongenoughdetermine";
 
     private final long expiration = 1000 * 60 * 60;
 
-    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    // private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     // private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
@@ -30,6 +31,7 @@ public class JwtUtil {
                 .claim("role", extractRole(username))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                // .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
                 .signWith(key)
                 .compact();
     }
